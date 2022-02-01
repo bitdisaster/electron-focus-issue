@@ -4,3 +4,13 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
+function pause() {
+  log.innerText += '\nBLUR';
+}
+
+function play() {
+  log.innerText += '\nFOCUS';
+}
+
+window.addEventListener('blur', pause);
+window.addEventListener('focus', play);

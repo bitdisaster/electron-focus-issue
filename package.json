@@ -1,10 +1,12 @@
 {
-  "name": "electron-quick-start",
+  "name": "testNotif",
+  "productName": "testNotif",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "package": "electron-packager .\\ testNotif --arch=x64 --platfrom=win32 --electronVersion=17.0.0 --overwrite",
+    "start": "npm run package && .\\testNotif-win32-x64\\testNotif.exe"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -14,9 +16,10 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Me",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^16.0.7"
+    "electron": "^17.0.0",
+    "electron-packager": "^15.4.0"
   }
 }
