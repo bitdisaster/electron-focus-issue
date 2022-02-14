@@ -12,8 +12,6 @@ const toastXML = `<toast launch="testNotif://bla" activationType="protocol">
 </visual>
 </toast>`;
 
-const timer = ms => new Promise( res => setTimeout(res, ms));
-
 const prepNotifications = () => {
   const {shell} = require('electron')
   app.setAppUserModelId('slack.notification.test');
@@ -38,8 +36,12 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-  mainWindow.on('blur', () => console.log('BLUR'));
-  mainWindow.on('focus', () => console.log('FOCUS'));
+  mainWindow.on('blur', () => {
+    console.log('BLUR');
+  });
+  mainWindow.on('focus', () => {
+    console.log('FOCUS')
+  });
 
 
   // and load the index.html of the app.
@@ -50,16 +52,20 @@ function createWindow () {
 }
 
 const focusApp = () => {
-  // desperate attempts to focus the window
   if (mainWindow) {
+    // this should be enough to get focus
+    mainWindow.focus();
+
+    // even these  desperate attempts to focus the window fail
+    const { exec } = require('child_process');
+    const cp = exec('%windir%\\System32\\rundll32.exe shell32.dll,Control_RunDLL');
+    cp.unref();
+    mainWindow.setEnabled(false);
+    mainWindow.setEnabled(true);
     mainWindow.setAlwaysOnTop(true);
     mainWindow.setAlwaysOnTop(false);
     mainWindow.focus();
-    mainWindow.webContents.focus();
-
-    const { exec } = require('child_process');
-    const cp = exec('%windir%\\System32\\rundll32.exe User32.dll,SetFocus 0');
-    cp.unref();
+    mainWindow.blur();
   }
 }
 
@@ -92,10 +98,6 @@ if(app.requestSingleInstanceLock({}) === false){
   })
 
   app.on('second-instance', (session, argv, wdir, data) => {
-    // console.log(session);
-    // console.log(argv);
-    // console.log(wdir);
-    // console.log(data);
     focusApp();
   });
 }
